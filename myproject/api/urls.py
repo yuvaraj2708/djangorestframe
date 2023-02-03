@@ -1,6 +1,6 @@
 from django.urls import path
 from .views import ProfileApiView,BookApiView
-from .views import update,updaterecord,delete,add,addrecord
+from .views import update,updaterecord,delete,addrecord,details
 
 urlpatterns = [
     path('',ProfileApiView.as_view(), name="profile"),
@@ -8,6 +8,6 @@ urlpatterns = [
     path('update/<int:id>', update, name='update'),
     path('update/updaterecord/<int:id>', updaterecord, name='updaterecord'),
     path('delete/<int:id>', delete, name='delete'),
-    path('add/', add, name='add'),
-    path('add/addrecord/', addrecord, name='addrecord'),
+    path('addrecord/', addrecord, name='addrecord'),
+    path('details/<int:id>',details,name="details")
 ]

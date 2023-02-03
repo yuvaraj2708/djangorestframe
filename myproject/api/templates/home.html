@@ -1,5 +1,9 @@
+{% extends "base.html" %}
 {% load static %}
 {% load rest_framework %}
+
+
+{% block content %}
 <!DOCTYPE html>
 
 <html lang="en">
@@ -7,7 +11,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>API Calls Demo</title>
+    <title>Margy</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <!-- Bootstrap core CSS -->
     <link href="static/CSS/bootstrap.css" rel="stylesheet" />
@@ -54,6 +58,11 @@
   padding: 8px 16px;
   text-decoration: none;
 }
+.page-links {
+            text-align: center;
+            margin: auto;
+            width: 50%
+        } 
 
     </style>
     <script src=
@@ -64,10 +73,28 @@
 
 <body data-gr-c-s-loaded="true">
 
-    <form action ="GET" >
+    <form action="addrecord/" method="post">
         {% csrf_token %}
+       <div class="form-group">
+         patient name:
+        <input class="form-control" name="title">
+        <br>
+        Test:
+        <input class="form-control" name="author">
+        <br>
+        phonenumber:
+        <input class="form-control" name="phonenumber">
+        <br>
+        address:
+        <input class="form-control" name="address">
+        <br>
+        status:
+        <input class="form-control" name="status">
+        <br>
+        <input type="submit" class="form-control" value="Submit">
         
        
+        </div> 
 
        
 
@@ -90,27 +117,17 @@
             <h1>APIs</h1>
             <p class="lead">Django restframe</p>
             <br>
-            <h2>Add New Student</h2><br>
+            <h2>Add New Patient</h2>
+          
             <div>
                
-            <div class="row">
+             <div class="row">
                 <div class="form-inline">
-                    <form action="addrecord/" method="post">
-                       
-                    <div class="form-group" style="margin-right: 20px;">
-                        <label for="txtId">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Id: &nbsp;</label>
-                    </div>
-                    <div class="form-group" style="margin-right: 20px;">
-                        <label for="txtFirstName">title: &nbsp;</label>
-                        <input  class="form-control" name="title" >
-                    </div>
-                    <div class="form-group" style="margin-right: 20px;">
-                        <label for="txtLastName">author: &nbsp;</label>
-                        <input  class="form-control"name="author" >
-                    </div>
+                   
+                   
                         <td>
                     <br>
-                    <button><a href="add/">add</a></button>
+                    
                     </form>
                 </div>
             </div>
@@ -118,43 +135,53 @@
             </div>
             <br><br>
 
-            <h2>Student List</h2>
+            <h2>Patient List</h2>
             <input id="gfg" type="text"  placeholder="Search here">
             <table class="table table-hover">
                 <tr>
                     <th>Id</th>
                     <th>serial no.</th>
-                    <th>Title</th>
-                    <th>Author</th>
+                    <th>Patient name</th>
+                    <th>Test</th>
                     <th>delete option</th>
                     <th>update option</th>
-
+                
                      </tr>
                 {% for profiles in profile %}
-                <tr><li>
+                <tr>
                     
                     <tbody id="geeks">
                     <td><a href="update/{{ profiles.id }}">{{ profiles.id }}</a></td>
                     <td>{{profiles.id}}</td>
-                    <td>{{profiles.title}}</td>
+                    <td><a href="details/{{ profiles.id }}">{{profiles.title}}</a></td>
                     <td>{{profiles.author}}</td>
+                    
                     <!-- <td><a href="delete/{{ profiles.id }}">delete</a> -->
                     <td><a href="{% url 'delete' profiles.id %}">delete</a>
                     <td><a href="{% url 'update' profiles.id %}">update</a>
-                        
+                    
                 </tr>
             </tbody>
+           
                    {% endfor %}
 
-                  
+                   <div class="page-links">
+                    {% if page.has_previous %}
+                    <a href="{% url 'profile' %}?page={{ page.previous_page_number }}">Previous Page</a>
+                    {% endif %}
+                    {% if page.has_next %}
+                    <a href="{% url 'profile' %}?page={{ page.next_page_number }}">Next Page</a>
+                    
+                    {% endif %}
+                    
+                </div>
               
                 <tbody id="divBody"></tbody>
 
                
             </table>
 
-
-           
+        
         </div>
        
     </div>
@@ -172,5 +199,5 @@
         });
     </script>
 </body>
-
+{% endblock %}
 </html>

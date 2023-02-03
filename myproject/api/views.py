@@ -8,6 +8,9 @@ from django.shortcuts import get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import loader
 from django.urls import reverse
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
+
 # Create your views here.
 class ProfileApiView(APIView):
     serializer_class=ProfileSerializer
@@ -21,16 +24,22 @@ class ProfileApiView(APIView):
 def index(request):
   mymembers = Profiles.objects.all().values()
   template = loader.get_template('home.html')
+  
+  books = Profiles.objects.all()
+
+  book_paginator = Paginator(books, 2)
+
+  page_num = request.GET.get('page',5)
+
+  page = book_paginator.get_page(page_num)
+
   context = {
     'Profiles': mymembers,
+    'count' : book_paginator.count,
+    'page' : page
   }
-  return HttpResponse,ProfileApiView.as_view()(template.render(context, request))       
 
- 
-   
-def add(request):
-  template = loader.get_template('add.html')
-  return HttpResponse(template.render({}, request))
+  return HttpResponse,ProfileApiView.as_view()(template.render(context, request))       
 
 
   
@@ -38,7 +47,11 @@ def add(request):
 def addrecord(request):
   title = request.POST['title']
   author = request.POST['author']
-  member = Profiles(title=title, author=author)
+  phonenumber = request.POST['phonenumber']
+  address = request.POST['address']
+  status = request.POST['status']
+
+  member = Profiles(title=title, author=author,phonenumber=phonenumber,address=address,status=status)
   member.save()
   return redirect('profile')
 
@@ -59,18 +72,24 @@ def update(request, id):
 def updaterecord(request, id):
   title = request.POST['title']
   author = request.POST['author']
+  phonenumber = request.POST['phonenumber']
+  address = request.POST['address']
+  status = request.POST['status']
   member = Profiles.objects.get(id=id)
   member.title= title
   member.author= author
+  member.phonenumber=phonenumber
+  member.address=address
+  member.status=status
   member.save()
   return redirect('profile')
 
 
 def details(request, id):
-  mymember = Profiles.objects.get(id=id)
+  profiles = Profiles.objects.get(id=id)
   template = loader.get_template('details.html')
   context = {
-    'mymember': mymember,
+    'profiles': profiles,
   }
   return HttpResponse(template.render(context, request))
 
@@ -90,7 +109,11 @@ class BookApiView(APIView):
 
             Profiles.objects.create(id=serializer_obj.data.get("id"),
                             title=serializer_obj.data.get("title"),
-                            author=serializer_obj.data.get("author")
+                            author=serializer_obj.data.get("author"),
+                            phonenumber=serializer_obj.data.get("phonenumber"),
+                            address=serializer_obj.data.get("address"),
+                            status=serializer_obj.data.get("status")
+
                             )
 
         book=Profiles.objects.all().filter(id=request.data["id"]).values()

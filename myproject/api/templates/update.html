@@ -1,3 +1,6 @@
+{% extends "base.html" %}
+{% block content %}
+
 <h1>Update</h1>
 
 <form action="updaterecord/{{ profiles.id }}" method="post">
@@ -8,5 +11,16 @@ title:<br>
 author:<br>
 <input name="author" value="{{ profiles.author }}">
 <br><br>
+phonenumber:<br>
+<input name="phonenumber" value="{{ profiles.phonenumber}}">
+<br><br>
+address:<br>
+<input name="address" value="{{ profiles.address }}">
+<br><br>
+status:<br>
+<input name="status" value="{{ profiles.status}}">
+<br><br>
 <input type="submit" value="Submit">
 </form>
+
+{% endblock %}

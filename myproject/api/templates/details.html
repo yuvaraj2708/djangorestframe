@@ -1,11 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
 <html>
 
 <body>
-
-<h1>{{ mymember.title }} {{ mymember.author }}</h1>
+    
+    
+    </div>
+<h1>{{ profiles.title }} </h1>
+  <h1>  {{ profiles.author }}</h1>
+  <h1>{{ profiles.phonenumber }}</h1>
+  <h1>{{ profiles.address }}</h1>
+  <h1>{{ profiles.status }}</h1>
   
 
-<p>Back to <a href="/profile">Members</a></p>
+<p>Back to <a href="/">Home</a></p>
 
+ {% endblock %}
 </body>
 </html>

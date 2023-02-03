@@ -1,0 +1,239 @@
+<html>
+    <style>
+body {
+  margin: 0;
+  padding: 0;
+  background: black;
+  color: white;
+  
+}
+
+nav {
+  position: fixed;
+  z-index: 9999;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 35px;
+}
+
+nav ul {
+  list-style: none;
+  margin: 0;
+  padding: .2em 2em;
+  float: right;
+}
+
+nav ul li {
+  display: inline-block;
+  margin: 0;
+  padding: .2em .7em;
+}
+
+nav a {
+  width: 100%;
+  height: 100%;
+  color: white;
+  text-decoration: none;
+  font-family: Ubuntu;
+  font-size: 1.15em;
+  font-weight: lighter;
+  letter-spacing: 1px;
+  transition: .25s ease-in-out;
+}
+
+nav a:hover {
+  color: rgb(220, 120, 0);
+}
+
+.nav-bg {
+  content: '';
+  position: absolute;
+  display: block;
+  top: -100%;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  background: rgb(50, 50, 50);
+  transition: .45s ease-in-out;
+}
+
+.bg-hidden {
+  top: -100%;
+  opacity: 0;
+}
+
+.bg-visible {
+  top: 0;
+  opacity: 1;
+}
+
+h1 {
+  text-align: center;
+  font-family: Ubuntu;
+  letter-spacing: 1px;
+}
+
+.hero {
+  position: relative;
+  width: 100%;
+  height: 500px;
+  background: rgb(50, 50, 50);
+  background: url(https://res.cloudinary.com/crunchbase-production/image/upload/c_lpad,h_256,w_256,f_auto,q_auto:eco,dpr_1/d11dc9897ab1ed302449) no-repeat 50% 50% fixed;
+  background-size: 30%;
+  overflow: hidden;
+}
+
+.hero h1 {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  padding: .3em;
+  font-size: 3em;
+  font-weight: lighter;
+}
+
+.content-wrapper {
+  width: 80%;
+  height: 3000px;
+  padding: 1em 10%;
+}
+
+.content-wrapper h1 {
+  margin: 0;
+  color: rgb(220, 120, 0);
+}
+
+.content-wrapper p {
+  font-family: "Open Sans";
+  text-indent: 1.5em;
+}
+.footer-basic {
+  padding:40px 0;
+  background-color:#1ac6ff;
+  color:#000307;
+}
+
+.footer-basic ul {
+  padding:0;
+  list-style:none;
+  text-align:center;
+  font-size:18px;
+  line-height:1.6;
+  margin-bottom:0;
+}
+
+.footer-basic li {
+  padding:0 10px;
+}
+
+.footer-basic ul a {
+  color:inherit;
+  text-decoration:none;
+  opacity:0.8;
+}
+
+.footer-basic ul a:hover {
+  opacity:1;
+}
+
+.footer-basic .social {
+  text-align:center;
+  padding-bottom:25px;
+}
+
+.footer-basic .social > a {
+  font-size:24px;
+  width:40px;
+  height:40px;
+  line-height:40px;
+  display:inline-block;
+  text-align:center;
+  border-radius:50%;
+  border:1px solid #ccc;
+  margin:0 8px;
+  color:inherit;
+  opacity:0.75;
+}
+
+.footer-basic .social > a:hover {
+  opacity:0.9;
+}
+
+.footer-basic .copyright {
+  margin-top:15px;
+  text-align:center;
+  font-size:13px;
+  color:#aaa;
+  margin-bottom:0;
+}
+  </style>
+  <script>
+    $(document).ready(function() {
+   $(window).on('scroll', function() {
+    if($(window).scrollTop() < 1000) {
+      $('.hero').css('background-size', 130 + parseInt($(window).scrollTop() / 5) + '%');
+      $('.hero h1').css('top', 50 + ($(window).scrollTop() * .1) + '%');
+      $('.hero h1').css('opacity', 1 - ($(window).scrollTop() * .003));
+    }
+     
+     if($(window).scrollTop() >= $('.content-wrapper').offset().top - 300) {
+       $('.nav-bg').removeClass('bg-hidden');
+       $('.nav-bg').addClass('bg-visible');
+     } else {
+       $('.nav-bg').removeClass('bg-visible');
+       $('.nav-bg').addClass('bg-hidden');
+     }
+  });
+});
+  </script>
+  <nav>
+    <div class="nav-bg"></div>
+    <ul>
+      <li><a href="">Link</a></li>
+      <li><a href="">Link</a></li>
+      <li><a href="">Link</a></li>
+      <li><a href="">Link</a></li>
+    </ul>
+  </nav>
+  <div class="hero">
+    
+  </div>
+  
+  {% block content %}
+
+  {% endblock %}
+  <!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Untitled</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+
+<body>
+    <div class="footer-basic">
+        <footer>
+            <div class="social"><a href="#"><i class="icon ion-social-instagram"></i></a><a href="#"><i class="icon ion-social-snapchat"></i></a><a href="#"><i class="icon ion-social-twitter"></i></a><a href="#"><i class="icon ion-social-facebook"></i></a></div>
+            <ul class="list-inline">
+                <li class="list-inline-item"><a href="#">Home</a></li>
+                <li class="list-inline-item"><a href="#">Services</a></li>
+                <li class="list-inline-item"><a href="#">About</a></li>
+                <li class="list-inline-item"><a href="#">Terms</a></li>
+                <li class="list-inline-item"><a href="#">Privacy Policy</a></li>
+            </ul>
+            <p class="copyright">Margytech © 2018</p>
+        </footer>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
+</body>
+  </html>
