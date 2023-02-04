@@ -8,3 +8,4 @@ class ProfileSerializer(serializers.Serializer):
     phonenumber=serializers.CharField(label="Enter phonenumber")
     address=serializers.CharField(label="Enter address")
     status=serializers.CharField(label="Enter status")
+

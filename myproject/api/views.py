@@ -9,8 +9,11 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.template import loader
 from django.urls import reverse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-
-
+from fpdf import FPDF
+from django.http import FileResponse
+from django.contrib.auth.models import User
+from django.contrib import auth
+from django.contrib.auth.decorators import login_required
 # Create your views here.
 class ProfileApiView(APIView):
     serializer_class=ProfileSerializer
@@ -95,6 +98,29 @@ def details(request, id):
 
 
 
+def report(request,id):
+   
+    profiles = Profiles.objects.get(id=id)
+    context = {
+    'profiles': profiles,
+     }
+    profiles.save()
+    pdf = FPDF('P', 'mm', 'A4')
+    pdf.add_page()
+    pdf.set_font('courier', 'B', 16)
+    pdf.cell(40, 10, 'This is what you have sold this month so far:',0,1)
+    pdf.cell(40, 10, '',0,1)
+    pdf.set_font('courier', '', 12)
+    pdf.cell(200, 8, f"{'title'.ljust(30)} {'author'.rjust(20)}", 0, 1)
+    pdf.line(10, 30, 150, 30)
+    pdf.line(10, 38, 150, 38)
+    # for line in context:
+        #  f"{line['title'].ljust(30)} {line['author'].rjust(20)}"
+
+    pdf.output('report.pdf', 'F')
+    return FileResponse(open('report.pdf', 'rb'), as_attachment=True, content_type='application/pdf')
+
+
 
 class BookApiView(APIView):
     serializer_class=ProfileSerializer
@@ -118,3 +144,32 @@ class BookApiView(APIView):
 
         book=Profiles.objects.all().filter(id=request.data["id"]).values()
         return Response({"Message":"New Book Added!", "Book":book})
+
+
+def signup(request):
+    if request.method == "POST":
+        if request.POST['password1'] == request.POST['password2']:
+            try:
+                User.objects.get(username = request.POST['username'])
+                return render (request,'register.html', {'error':'Username is already taken!'})
+            except User.DoesNotExist:
+                user = User.objects.create_user(request.POST['username'],password=request.POST['password1'])
+                auth.login(request,user)
+                return redirect('')
+        else:
+            return render (request,'register.html', {'error':'Password does not match!'})
+    else:
+        return render(request,'register.html')
+
+@login_required
+def login(request):
+    if request.method == 'POST':
+        user = auth.authenticate(username=request.POST['username'],password = request.POST['password'])
+        if user is not None:
+            auth.login(request,user)
+            return redirect('home/')
+        else:
+            return render (request,'login.html', {'error':'Username or password is incorrect!'})
+    else:
+        return render(request,'login.html')
+
