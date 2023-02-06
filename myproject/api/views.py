@@ -1,5 +1,7 @@
 from django.shortcuts import render, redirect
 from rest_framework.views import APIView
+from rest_framework.viewsets import ModelViewSet
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from .models import *
 from .serializers import *
@@ -39,7 +41,10 @@ def index(request):
   context = {
     'Profiles': mymembers,
     'count' : book_paginator.count,
-    'page' : page
+    'page' : page,
+     'count': book_paginator.count,
+        'page' : page
+        
   }
 
   return HttpResponse,ProfileApiView.as_view()(template.render(context, request))       
@@ -98,53 +103,32 @@ def details(request, id):
 
 
 
-def report(request,id):
-   
-    profiles = Profiles.objects.get(id=id)
-    context = {
-    'profiles': profiles,
-     }
-    profiles.save()
+def report(request):
+    sales = [
+        {"item": "Keyboard", "amount": "$120,00"},
+        {"item": "Mouse", "amount": "$10,00"},
+        {"item": "House", "amount": "$1 000 000,00"},
+    ]
     pdf = FPDF('P', 'mm', 'A4')
     pdf.add_page()
     pdf.set_font('courier', 'B', 16)
     pdf.cell(40, 10, 'This is what you have sold this month so far:',0,1)
     pdf.cell(40, 10, '',0,1)
     pdf.set_font('courier', '', 12)
-    pdf.cell(200, 8, f"{'title'.ljust(30)} {'author'.rjust(20)}", 0, 1)
+    pdf.cell(200, 8, f"{'Item'.ljust(30)} {'Amount'.rjust(20)}", 0, 1)
     pdf.line(10, 30, 150, 30)
     pdf.line(10, 38, 150, 38)
-    # for line in context:
-        #  f"{line['title'].ljust(30)} {line['author'].rjust(20)}"
-
+    for line in sales:
+        pdf.cell(200, 8, f"{line['item'].ljust(30)} {line['amount'].rjust(20)}", 0, 1)
     pdf.output('report.pdf', 'F')
     return FileResponse(open('report.pdf', 'rb'), as_attachment=True, content_type='application/pdf')
 
 
-
-class BookApiView(APIView):
+class BookApiView(ModelViewSet):
+    queryset = Profiles.objects.all()
     serializer_class=ProfileSerializer
-    def get(self,request):
-        allBooks=Profiles.objects.all().values()
-        return Response({"Message":"List of Books", "Book List":allBooks})
-
-    def post(self,request):
-        print('Request data is : ',request.data)
-        serializer_obj=ProfileSerializer(data=request.data)
-        if(serializer_obj.is_valid()):
-
-            Profiles.objects.create(id=serializer_obj.data.get("id"),
-                            title=serializer_obj.data.get("title"),
-                            author=serializer_obj.data.get("author"),
-                            phonenumber=serializer_obj.data.get("phonenumber"),
-                            address=serializer_obj.data.get("address"),
-                            status=serializer_obj.data.get("status")
-
-                            )
-
-        book=Profiles.objects.all().filter(id=request.data["id"]).values()
-        return Response({"Message":"New Book Added!", "Book":book})
-
+    permission_class = [IsAuthenticated ] 
+    
 
 def signup(request):
     if request.method == "POST":
@@ -172,4 +156,3 @@ def login(request):
             return render (request,'login.html', {'error':'Username or password is incorrect!'})
     else:
         return render(request,'login.html')
-

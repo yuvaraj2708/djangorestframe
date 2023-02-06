@@ -59,10 +59,18 @@
   text-decoration: none;
 }
 .page-links {
+            color: rgb(10, 10, 10); 
             text-align: center;
             margin: auto;
             width: 50%
+            
+        
         } 
+.form-group{
+    text-align: center;
+            margin: auto;
+            width: 50%
+}
 
     </style>
     <script src=
@@ -70,7 +78,7 @@
         </script>
 </head>
 
-
+<p id="demo"></p>
 <body data-gr-c-s-loaded="true">
 
     <form action="addrecord/" method="post">
@@ -78,19 +86,19 @@
        <div class="form-group">
          patient name:
         <input class="form-control" name="title">
-        <br>
+        
         Test:
         <input class="form-control" name="author">
-        <br>
+        
         phonenumber:
         <input class="form-control" name="phonenumber">
-        <br>
+        
         address:
         <input class="form-control" name="address">
-        <br>
+        
         status:
         <input class="form-control" name="status">
-        <br>
+        
         <input type="submit" class="form-control" value="Submit">
         
        
@@ -157,7 +165,7 @@
                     <td>{{profiles.author}}</td>
                     
                     <!-- <td><a href="delete/{{ profiles.id }}">delete</a> -->
-                    <td><a href="{% url 'delete' profiles.id %}">delete</a>
+                    <td><a href="{% url 'delete' profiles.id %}" onclick="return confirm('Are you sure to delete?')">delete</a>
                     <td><a href="{% url 'update' profiles.id %}">update</a>
                     
                 </tr>
@@ -171,9 +179,7 @@
                     {% endif %}
                     {% if page.has_next %}
                     <a href="{% url 'profile' %}?page={{ page.next_page_number }}">Next Page</a>
-                    
                     {% endif %}
-                    
                 </div>
               
                 <tbody id="divBody"></tbody>
@@ -197,6 +203,18 @@
                 });
             });
         });
+        function confirmation(){
+    var result = confirm("Are you sure to delete?");
+    if(result){
+        // Delete logic goes here
+    }
+}
+setInterval(myTimer, 1000);
+
+function myTimer() {
+  const d = new Date();
+  document.getElementById("demo").innerHTML = d.toLocaleTimeString();
+}
     </script>
 </body>
 {% endblock %}
